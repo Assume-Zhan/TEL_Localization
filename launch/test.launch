@@ -1,0 +1,6 @@
+<launch>
+
+    <node name="Localization_Reset_server" pkg="localization" type="Localization_Reset_server" />
+    <node name="Localization_node" pkg="localization" type="Localization_node" />
+
+</launch>
