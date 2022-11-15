@@ -1,6 +1,8 @@
 #ifndef _ODOMETRY_H_
 #define _ODOMETRY_H_
 
+#include <cmath>
+
 #include "geometry_msgs/Pose2D.h"
 #include "geometry_msgs/Twist.h"
 #include "localization/Locate.h"
@@ -9,28 +11,47 @@
 
 class ODOMETRY {
    public:
-    static void UpdateData_IMU(const sensor_msgs::Imu::ConstPtr& msg);
-    static void UpdateData_Encoder(const geometry_msgs::Twist::ConstPtr& msg);
-    static void UpdateData_Lidar();
-    static void UpdateDate_FlowSensor(const geometry_msgs::Pose2D::ConstPtr& msg);
+    ODOMETRY();
+    ~ODOMETRY();
 
-    void SetPosition(double x, double y, double w);
-    localization::Locate* GetLocateInfo();
+    static void CallBack_IMU(const sensor_msgs::Imu::ConstPtr& msg);
+    static void CallBack_Encoder(const geometry_msgs::Twist::ConstPtr& msg);
+    static void CallBack_Lidar();
+    static void CallBack_FlowSensor(const geometry_msgs::Pose2D::ConstPtr& msg);
+
+    void SetPosition(double x, double y, double Omega);
+    localization::Locate* GetLocation();
 
     void Reset();
 
     bool DebugMode;
-
-   private:
-    double Time_Last;
-    localization::Locate Locate_Info;
+    int Param_IgnoreFirstNData_Encoder;
+    int Param_IgnoreFirstNData_IMU;
+    int Param_IgnoreFirstNData_FlowSensor;
 
     double x_offset;
     double y_offset;
     double w_offset;
 
-    double Encoder_Time_Before;
-    double Encoder_Time_After;
+   private:
+    void UpdateData_IMU(const sensor_msgs::Imu::ConstPtr& msg);
+    void UpdateData_Encoder(const geometry_msgs::Twist::ConstPtr& msg);
+    void UpdateData_Lidar();
+    void UpdateDate_FlowSensor(const geometry_msgs::Pose2D::ConstPtr& msg);
+
+    localization::Locate Location;
+
+    double TimeLast_Encoder;
+    double TimeLast_FlowSensor;
+    double TimeLast_IMU;
+
+    double TimeCurrent_Encoder;
+    double TimeCurrent_FlowSensor;
+    double TimeCurrent_IMU;
+
+    int FirstUpdate_Encoder;
+    int FirstUpdate_FlowSensor;
+    int FirstUpdate_IMU;
 };
 
 extern ODOMETRY Odometry;

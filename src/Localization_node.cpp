@@ -8,9 +8,9 @@ int main(int argc, char **argv) {
     // ------------------------------------------------------------
     ros::NodeHandle nh("~");
 
-    ros::Subscriber Data_Encoder_sub = nh.subscribe("/callback_vel", 1000, ODOMETRY::UpdateData_Encoder);
-    ros::Subscriber Data_FlowSensor_sub = nh.subscribe("/FlowSensor/Position", 1000, ODOMETRY::UpdateDate_FlowSensor);
-    ros::Subscriber Data_Imu_sub = nh.subscribe("/imu/data", 1000, ODOMETRY::UpdateData_IMU);
+    ros::Subscriber Data_Encoder_sub = nh.subscribe("/callback_vel", 1000, ODOMETRY::CallBack_Encoder);
+    ros::Subscriber Data_FlowSensor_sub = nh.subscribe("/FlowSensor/Position", 1000, ODOMETRY::CallBack_FlowSensor);
+    ros::Subscriber Data_Imu_sub = nh.subscribe("/imu/data", 1000, ODOMETRY::CallBack_IMU);
 
     ros::Publisher Loc_Pub = nh.advertise<localization::Locate>("/Localization", 1000);
 
@@ -19,6 +19,16 @@ int main(int argc, char **argv) {
     // ------------------------------------------------------------
     if (!nh.getParam("DebugMode", Odometry.DebugMode)) {
         Odometry.DebugMode = false;
+    }
+
+    if (!nh.getParam("IgnoreFirstNData_Encoder", Odometry.Param_IgnoreFirstNData_Encoder)) {
+        Odometry.Param_IgnoreFirstNData_Encoder = 1;
+    }
+    if (!nh.getParam("IgnoreFirstNData_IMU", Odometry.Param_IgnoreFirstNData_IMU)) {
+        Odometry.Param_IgnoreFirstNData_IMU = 1;
+    }
+    if (!nh.getParam("IgnoreFirstNData_FlowSensor", Odometry.Param_IgnoreFirstNData_FlowSensor)) {
+        Odometry.Param_IgnoreFirstNData_FlowSensor = 1;
     }
 
     int Param_Pub_Frequency;
@@ -31,7 +41,7 @@ int main(int argc, char **argv) {
     // Ros Loop
     // ------------------------------------------------------------
     while (nh.ok()) {
-        Loc_Pub.publish(*(Odometry.GetLocateInfo()));
+        Loc_Pub.publish(*(Odometry.GetLocation()));
 
         ros::spinOnce();
         Pub_Frequency.sleep();
