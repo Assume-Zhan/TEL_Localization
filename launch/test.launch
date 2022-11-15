@@ -1,6 +1,12 @@
 <launch>
 
-    <node name="Localization_Reset_server" pkg="localization" type="Localization_Reset_server" />
-    <node name="Localization_node" pkg="localization" type="Localization_node" />
+    <node name="Localization_Reset_server" pkg="localization" type="Localization_Reset_server" output="screen">
+        <param name="DebugMode" type="bool" value="true"/>
+    </node>
+
+    <node name="Localization_node" pkg="localization" type="Localization_node" output="screen">
+        <param name="DebugMode" type="bool" value="false"/>
+        <param name="Frequency" type="int"  value="10"  />
+    </node>
 
 </launch>
