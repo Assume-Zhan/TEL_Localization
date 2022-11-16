@@ -156,9 +156,6 @@ include_directories(
 #   ${catkin_LIBRARIES}
 # )
 
-add_executable(Localization_Reset_server src/Reset_server.cpp lib/Odometry.cpp)
-target_link_libraries(Localization_Reset_server ${catkin_LIBRARIES})
-
 add_executable(Localization_Reset_client src/Reset_client.cpp)
 target_link_libraries(Localization_Reset_client ${catkin_LIBRARIES})
 

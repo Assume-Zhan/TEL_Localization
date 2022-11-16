@@ -1,12 +1,20 @@
 #include "localization/Odometry.h"
 
-ODOMETRY Odometry;
+ODOMETRY* Odometry;
 
 ODOMETRY::ODOMETRY() {
-    Reset();
 }
 
 ODOMETRY::~ODOMETRY() {
+}
+
+void ODOMETRY::Init(ros::NodeHandle* nh) {
+    Data_Encoder_sub = nh->subscribe("/callback_vel", 1000, CallBack_Encoder);
+    Data_FlowSensor_sub = nh->subscribe("/FlowSensor/Position", 1000, CallBack_FlowSensor);
+    Data_IMU_sub = nh->subscribe("/imu/data", 1000, CallBack_IMU);
+    Reset_Server = nh->advertiseService("Localization_Reset", Callback_Reset);
+
+    Reset();
 }
 
 void ODOMETRY::SetPosition(double x, double y, double Omega) {
@@ -70,13 +78,19 @@ void ODOMETRY::UpdateDate_FlowSensor(const geometry_msgs::Pose2D::ConstPtr& msg)
 // Callback function.
 // ------------------------------------------------------------
 void ODOMETRY::CallBack_IMU(const sensor_msgs::Imu::ConstPtr& msg) {
-    Odometry.UpdateData_IMU(msg);
+    Odometry->UpdateData_IMU(msg);
 }
 
 void ODOMETRY::CallBack_Encoder(const geometry_msgs::Twist::ConstPtr& msg) {
-    Odometry.UpdateData_Encoder(msg);
+    Odometry->UpdateData_Encoder(msg);
 }
 
 void ODOMETRY::CallBack_FlowSensor(const geometry_msgs::Pose2D::ConstPtr& msg) {
-    Odometry.UpdateDate_FlowSensor(msg);
+    Odometry->UpdateDate_FlowSensor(msg);
+}
+
+bool ODOMETRY::Callback_Reset(localization::Reset::Request& req, localization::Reset::Response& res) {
+    Odometry->Reset();
+    res.isSuccess = true;
+    return true;
 }

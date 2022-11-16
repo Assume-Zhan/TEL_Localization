@@ -8,27 +8,27 @@ int main(int argc, char **argv) {
     // ------------------------------------------------------------
     ros::NodeHandle nh("~");
 
-    ros::Subscriber Data_Encoder_sub = nh.subscribe("/callback_vel", 1000, ODOMETRY::CallBack_Encoder);
-    ros::Subscriber Data_FlowSensor_sub = nh.subscribe("/FlowSensor/Position", 1000, ODOMETRY::CallBack_FlowSensor);
-    ros::Subscriber Data_Imu_sub = nh.subscribe("/imu/data", 1000, ODOMETRY::CallBack_IMU);
-
     ros::Publisher Loc_Pub = nh.advertise<localization::Locate>("/Localization", 1000);
+
+    Odometry = new ODOMETRY();
+
+    Odometry->Init(&nh);
 
     // ------------------------------------------------------------
     // Get Parameter from roslaunch.
     // ------------------------------------------------------------
-    if (!nh.getParam("DebugMode", Odometry.DebugMode)) {
-        Odometry.DebugMode = false;
+    if (!nh.getParam("DebugMode", Odometry->DebugMode)) {
+        Odometry->DebugMode = false;
     }
 
-    if (!nh.getParam("IgnoreFirstNData_Encoder", Odometry.IgnoreFirstNData_Encoder)) {
-        Odometry.IgnoreFirstNData_Encoder = 1;
+    if (!nh.getParam("IgnoreFirstNData_Encoder", Odometry->IgnoreFirstNData_Encoder)) {
+        Odometry->IgnoreFirstNData_Encoder = 1;
     }
-    if (!nh.getParam("IgnoreFirstNData_IMU", Odometry.IgnoreFirstNData_IMU)) {
-        Odometry.IgnoreFirstNData_IMU = 1;
+    if (!nh.getParam("IgnoreFirstNData_IMU", Odometry->IgnoreFirstNData_IMU)) {
+        Odometry->IgnoreFirstNData_IMU = 1;
     }
-    if (!nh.getParam("IgnoreFirstNData_FlowSensor", Odometry.IgnoreFirstNData_FlowSensor)) {
-        Odometry.IgnoreFirstNData_FlowSensor = 1;
+    if (!nh.getParam("IgnoreFirstNData_FlowSensor", Odometry->IgnoreFirstNData_FlowSensor)) {
+        Odometry->IgnoreFirstNData_FlowSensor = 1;
     }
 
     int Param_Pub_Frequency;
@@ -41,11 +41,15 @@ int main(int argc, char **argv) {
     // Ros Loop
     // ------------------------------------------------------------
     while (nh.ok()) {
-        Loc_Pub.publish(*(Odometry.GetLocation()));
+        Loc_Pub.publish(*(Odometry->GetLocation()));
+
+        // ROS_INFO("%lf %lf %lf", Odometry->GetLocation()->PositionX, Odometry->GetLocation()->PositionY, Odometry->GetLocation()->PositionOmega);
 
         ros::spinOnce();
         Pub_Frequency.sleep();
     }
+
+    delete Odometry;
 
     return 0;
 }
