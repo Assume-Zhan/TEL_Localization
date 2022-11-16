@@ -36,12 +36,12 @@ void ODOMETRY::Reset() {
 void ODOMETRY::UpdateData_Encoder(const geometry_msgs::Twist::ConstPtr& msg) {
     TimeCurrent_Encoder = ros::Time::now().toSec();
 
-    if (FirstUpdate_Encoder < Param_IgnoreFirstNData_Encoder) {
+    if (FirstUpdate_Encoder < IgnoreFirstNData_Encoder) {
         FirstUpdate_Encoder += 1;
     } else {
         double DeltaTime = TimeCurrent_Encoder - TimeLast_Encoder;
 
-        // TODO: Should not use Location to record encoder data.
+        // NOTE : Should not use (Location) to record encoder data.
         Location.VelocityX = msg->linear.x;
         Location.VelocityY = msg->linear.y;
         Location.VelocityOmega = msg->angular.z;
@@ -50,9 +50,9 @@ void ODOMETRY::UpdateData_Encoder(const geometry_msgs::Twist::ConstPtr& msg) {
         double DeltaY = Location.VelocityY * DeltaTime;
         double DeltaOmega = Location.VelocityOmega * DeltaTime;
 
-        Location.PositionX += DeltaX;
-        Location.PositionY += DeltaY;
         Location.PositionOmega = std::max(std::min(Location.PositionOmega + DeltaOmega, 2 * M_PI), 0.0);
+        Location.PositionX += DeltaX * cos(Location.PositionOmega) - DeltaY * sin(Location.PositionOmega);
+        Location.PositionY += DeltaX * sin(Location.PositionOmega) + DeltaY * cos(Location.PositionOmega);
     }
 
     TimeLast_Encoder = TimeCurrent_Encoder;

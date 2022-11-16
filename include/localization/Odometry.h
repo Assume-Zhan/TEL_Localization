@@ -25,9 +25,9 @@ class ODOMETRY {
     void Reset();
 
     bool DebugMode;
-    int Param_IgnoreFirstNData_Encoder;
-    int Param_IgnoreFirstNData_IMU;
-    int Param_IgnoreFirstNData_FlowSensor;
+    int IgnoreFirstNData_Encoder;
+    int IgnoreFirstNData_IMU;
+    int IgnoreFirstNData_FlowSensor;
 
     double x_offset;
     double y_offset;

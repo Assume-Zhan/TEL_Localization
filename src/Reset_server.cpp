@@ -10,6 +10,9 @@
 bool Callback_Reset(localization::Reset::Request &req, localization::Reset::Response &res) {
     Odometry.Reset();
     res.isSuccess = true;
+
+    ROS_INFO("%lf %lf %lf", Odometry.GetLocation()->PositionX, Odometry.GetLocation()->PositionY, Odometry.GetLocation()->PositionOmega);
+
     return true;
 }
 

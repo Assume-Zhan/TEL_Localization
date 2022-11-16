@@ -21,14 +21,14 @@ int main(int argc, char **argv) {
         Odometry.DebugMode = false;
     }
 
-    if (!nh.getParam("IgnoreFirstNData_Encoder", Odometry.Param_IgnoreFirstNData_Encoder)) {
-        Odometry.Param_IgnoreFirstNData_Encoder = 1;
+    if (!nh.getParam("IgnoreFirstNData_Encoder", Odometry.IgnoreFirstNData_Encoder)) {
+        Odometry.IgnoreFirstNData_Encoder = 1;
     }
-    if (!nh.getParam("IgnoreFirstNData_IMU", Odometry.Param_IgnoreFirstNData_IMU)) {
-        Odometry.Param_IgnoreFirstNData_IMU = 1;
+    if (!nh.getParam("IgnoreFirstNData_IMU", Odometry.IgnoreFirstNData_IMU)) {
+        Odometry.IgnoreFirstNData_IMU = 1;
     }
-    if (!nh.getParam("IgnoreFirstNData_FlowSensor", Odometry.Param_IgnoreFirstNData_FlowSensor)) {
-        Odometry.Param_IgnoreFirstNData_FlowSensor = 1;
+    if (!nh.getParam("IgnoreFirstNData_FlowSensor", Odometry.IgnoreFirstNData_FlowSensor)) {
+        Odometry.IgnoreFirstNData_FlowSensor = 1;
     }
 
     int Param_Pub_Frequency;
