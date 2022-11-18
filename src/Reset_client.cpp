@@ -9,7 +9,7 @@ int main(int argc, char **argv) {
 
     localization::Reset srv;
 
-    if (client.call(srv)) {
+        if (client.call(srv)) {
         if (srv.response.isSuccess) {
             ROS_INFO("Reset Odometry success.");
         } else {

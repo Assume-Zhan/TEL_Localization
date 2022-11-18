@@ -1,5 +1,7 @@
 #include "localization/Odometry.h"
 
+#include "localization/Reset.h"
+
 ODOMETRY* Odometry;
 
 ODOMETRY::ODOMETRY() {
@@ -90,7 +92,7 @@ void ODOMETRY::CallBack_FlowSensor(const geometry_msgs::Pose2D::ConstPtr& msg) {
 }
 
 bool ODOMETRY::Callback_Reset(localization::Reset::Request& req, localization::Reset::Response& res) {
-    Odometry->Reset();
+    Odometry->SetPosition(req.x, req.y, req.theta);
     res.isSuccess = true;
     return true;
 }
