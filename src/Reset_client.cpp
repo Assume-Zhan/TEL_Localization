@@ -5,11 +5,11 @@ int main(int argc, char **argv) {
     ros::init(argc, argv, "Localization_Reset_client");
 
     ros::NodeHandle nh;
-    ros::ServiceClient client = nh.serviceClient<localization::Reset>("/Localization_node/Localization_Reset");
+    ros::ServiceClient client = nh.serviceClient<localization::Reset>("/Localization_Reset");
 
     localization::Reset srv;
 
-        if (client.call(srv)) {
+    if (client.call(srv)) {
         if (srv.response.isSuccess) {
             ROS_INFO("Reset Odometry success.");
         } else {

@@ -15,7 +15,7 @@ class ODOMETRY {
     ODOMETRY();
     ~ODOMETRY();
 
-    void Init(ros::NodeHandle* nh);
+    void Init(ros::NodeHandle* nh_Public, ros::NodeHandle* nh_Private);
     void Reset();
 
     static void CallBack_IMU(const sensor_msgs::Imu::ConstPtr& msg);
