@@ -1,6 +1,6 @@
 #include "localization/Odometry.h"
 
-int main(int argc, char **argv) {
+int main(int argc, char** argv){
     ros::init(argc, argv, "Localization_node");
 
     // ------------------------------------------------------------
@@ -17,22 +17,22 @@ int main(int argc, char **argv) {
     // ------------------------------------------------------------
     // Get Parameter from roslaunch.
     // ------------------------------------------------------------
-    if (!nh.getParam("DebugMode", Odometry->DebugMode)) {
+    if(!nh.getParam("DebugMode", Odometry->DebugMode)){
         Odometry->DebugMode = false;
     }
 
-    if (!nh.getParam("IgnoreFirstNData_Encoder", Odometry->IgnoreFirstNData_Encoder)) {
+    if(!nh.getParam("IgnoreFirstNData_Encoder", Odometry->IgnoreFirstNData_Encoder)){
         Odometry->IgnoreFirstNData_Encoder = 1;
     }
-    if (!nh.getParam("IgnoreFirstNData_IMU", Odometry->IgnoreFirstNData_IMU)) {
+    if(!nh.getParam("IgnoreFirstNData_IMU", Odometry->IgnoreFirstNData_IMU)){
         Odometry->IgnoreFirstNData_IMU = 1;
     }
-    if (!nh.getParam("IgnoreFirstNData_FlowSensor", Odometry->IgnoreFirstNData_FlowSensor)) {
+    if(!nh.getParam("IgnoreFirstNData_FlowSensor", Odometry->IgnoreFirstNData_FlowSensor)){
         Odometry->IgnoreFirstNData_FlowSensor = 1;
     }
 
     int Param_Pub_Frequency;
-    if (!nh.getParam("Frequency", Param_Pub_Frequency)) {
+    if(!nh.getParam("Frequency", Param_Pub_Frequency)){
         Param_Pub_Frequency = 10;
     }
     ros::Rate Pub_Frequency(Param_Pub_Frequency);
@@ -40,7 +40,7 @@ int main(int argc, char **argv) {
     // ------------------------------------------------------------
     // Ros Loop
     // ------------------------------------------------------------
-    while (nh.ok()) {
+    while(nh.ok()){
         Loc_Pub.publish(*(Odometry->GetLocation()));
 
         // ROS_INFO("%lf %lf %lf", Odometry->GetLocation()->PositionX, Odometry->GetLocation()->PositionY, Odometry->GetLocation()->PositionOmega);
