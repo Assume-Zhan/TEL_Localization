@@ -12,7 +12,7 @@ int main(int argc, char** argv){
 
     Odometry = new ODOMETRY();
 
-    Odometry->Init(&nh);
+    Odometry->Init(&nh_Public, &nh_Private);
 
     // ------------------------------------------------------------
     // Get Parameter from roslaunch.
@@ -42,8 +42,6 @@ int main(int argc, char** argv){
     // ------------------------------------------------------------
     while(nh.ok()){
         Loc_Pub.publish(*(Odometry->GetLocation()));
-
-        // ROS_INFO("%lf %lf %lf", Odometry->GetLocation()->PositionX, Odometry->GetLocation()->PositionY, Odometry->GetLocation()->PositionOmega);
 
         ros::spinOnce();
         Pub_Frequency.sleep();

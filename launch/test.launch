@@ -2,7 +2,7 @@
 
     <node name="Localization_node" pkg="localization" type="Localization_node" output="screen">
         <param name="DebugMode" type="bool" value="false"/>
-        <param name="Frequency" type="int"  value="1"/>
+        <param name="Frequency" type="int"  value="100"/>
 
         <param name="IgnoreFirstNData_Encoder"    type="int" value="1"/>
         <param name="IgnoreFirstNData_IMU"        type="int" value="1"/>

@@ -10,11 +10,11 @@ ODOMETRY::ODOMETRY() {
 ODOMETRY::~ODOMETRY() {
 }
 
-void ODOMETRY::Init(ros::NodeHandle* nh) {
-    Data_Encoder_sub = nh->subscribe("/callback_vel", 1000, CallBack_Encoder);
-    Data_FlowSensor_sub = nh->subscribe("/FlowSensor/Position", 1000, CallBack_FlowSensor);
-    Data_IMU_sub = nh->subscribe("/imu/data", 1000, CallBack_IMU);
-    Reset_Server = nh->advertiseService("Localization_Reset", Callback_Reset);
+void ODOMETRY::Init(ros::NodeHandle* nh_Public, ros::NodeHandle* nh_Private) {
+    Data_Encoder_sub = nh_Public->subscribe("callback_vel", 1000, CallBack_Encoder);
+    Data_FlowSensor_sub = nh_Public->subscribe("FlowSensor/Position", 1000, CallBack_FlowSensor);
+    Data_IMU_sub = nh_Public->subscribe("imu/data", 1000, CallBack_IMU);
+    Reset_Server = nh_Public->advertiseService("Localization_Reset", Callback_Reset);
 
     Reset();
 }
@@ -26,6 +26,10 @@ void ODOMETRY::SetPosition(double x, double y, double Omega) {
 }
 
 localization::Locate* ODOMETRY::GetLocation() {
+    if (DebugMode) {
+        ROS_INFO("%.3lf %.3lf %.3lf", Location.PositionX, Location.PositionY, Location.PositionOmega);
+    }
+
     return &(Location);
 }
 
